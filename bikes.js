@@ -197,7 +197,7 @@ function openBooking(bikeId) {
   `;
 
   document.getElementById("waBookBtn").href =
-    `https://wa.me/919876543210?text=Hi%2C%20I%20want%20to%20rent%20${encodeURIComponent(selectedBike.name)}`;
+    `https://wa.me/919703333120?text=Hi%2C%20I%20want%20to%20rent%20${encodeURIComponent(selectedBike.name)}`;
 
   // Reset to booking tab
   document.querySelectorAll(".modal-tab").forEach(t => t.classList.remove("active"));

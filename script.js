@@ -75,3 +75,39 @@ window.addEventListener("load", () => {
     }, 300);
   }, 1600);
 });
+
+// ─── COUNT-UP ANIMATION ───────────────────────────────────────────────────────
+function countUp(el) {
+  const target = parseInt(el.getAttribute("data-target"));
+  const prefix = el.getAttribute("data-prefix") || "";
+  const suffix = el.getAttribute("data-suffix") || "+";
+  let current = 0;
+  const increment = Math.ceil(target / 60);
+  const timer = setInterval(function() {
+    current += increment;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = prefix + current + suffix;
+  }, 25);
+}
+
+function initCountUp() {
+  const stats = document.querySelectorAll(".stat-num[data-target]");
+  if (!stats.length) return;
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        countUp(e.target);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  stats.forEach(function(el) { observer.observe(el); });
+}
+
+// Call after loader hides
+window.addEventListener("load", function() {
+  setTimeout(initCountUp, 1800);
+});
