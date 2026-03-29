@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – Warrior Bikes</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    Warrior<span>Bikes</span>
+    <small>Admin Dashboard</small>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="nav-item active" data-page="dashboard" onclick="showPage('dashboard', this)">
+      <span class="icon">📊</span> Dashboard
+    </a>
+    <a class="nav-item" data-page="add-bike" onclick="showPage('add-bike', this)">
+      <span class="icon">➕</span> Add Bike
+    </a>
+    <a class="nav-item" data-page="manage-bikes" onclick="showPage('manage-bikes', this)">
+      <span class="icon">🏍️</span> Manage Bikes
+    </a>
+    <a class="nav-item" data-page="bookings" onclick="showPage('bookings', this)">
+      <span class="icon">📋</span> Bookings
+    </a>
+    <a class="nav-item" data-page="payments" onclick="showPage('payments', this)">
+      <span class="icon">💳</span> Payments
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="index.html">← Back to Website</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="hamburger-admin" id="hamburgerAdmin">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-left">
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageSubtitle">Welcome back, Admin</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="admin-badge">🔐 Admin</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon orange">🏍️</div>
+          <div><div class="stat-num" id="totalBikes">0</div><div class="stat-label">Total Bikes</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">📋</div>
+          <div><div class="stat-num" id="dashBookings">0</div><div class="stat-label">Total Bookings</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">💰</div>
+          <div><div class="stat-num" id="dashRevenue">₹0</div><div class="stat-label">Total Revenue</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">✅</div>
+          <div><div class="stat-num" id="dashConfirmed">0</div><div class="stat-label">Confirmed</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Recent Bookings</div><div class="card-subtitle">Latest bookings from website</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Booking ID</th><th>Customer</th><th>Bike</th><th>From</th><th>To</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody id="dashRecentBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD BIKE PAGE -->
+    <div class="page" id="page-add-bike">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Add New Bike</div><div class="card-subtitle">Fill in the details to add a bike to the fleet</div></div>
+        </div>
+        <form id="addBikeForm" onsubmit="addBike(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Bike Name *</label>
+              <input type="text" id="bikeName" placeholder="e.g. Royal Enfield Classic 350" required />
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="bikeCategory" required>
+                <option value="">Select category</option>
+                <option value="cruiser">Cruiser</option>
+                <option value="sport">Sport</option>
+                <option value="scooter">Scooter</option>
+                <option value="adventure">Adventure</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Price per Day (₹) *</label>
+              <input type="number" id="bikePrice" placeholder="e.g. 799" min="1" required />
+            </div>
+            <div class="form-group">
+              <label>Location *</label>
+              <input type="text" id="bikeLocation" placeholder="e.g. Banjara Hills" required />
+            </div>
+            <div class="form-group">
+              <label>Engine CC</label>
+              <input type="text" id="bikeCC" placeholder="e.g. 350cc" />
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="bikeStatus">
+                <option value="available">Available</option>
+                <option value="rented">Rented</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Image URL</label>
+              <input type="url" id="bikeImg" placeholder="https://example.com/bike.jpg" oninput="previewUrl(this)" />
+            </div>
+            <div class="form-group full">
+              <label>Upload Image</label>
+              <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                <div style="font-size:2rem;">📷</div>
+                <p>Click to upload or drag & drop<br /><small>PNG, JPG up to 5MB</small></p>
+                <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="previewImage(this)" />
+              </div>
+              <img id="imgPreview" style="display:none;margin-top:10px;width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border);" />
+            </div>
+            <div class="form-group full">
+              <label>Description</label>
+              <textarea id="bikeDesc" placeholder="Brief description of the bike..."></textarea>
+            </div>
+          </div>
+          <div class="form-actions" style="margin-top:20px;">
+            <button type="submit" class="btn btn-orange">➕ Add Bike</button>
+            <button type="reset" class="btn btn-ghost" onclick="resetForm()">🔄 Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MANAGE BIKES PAGE -->
+    <div class="page" id="page-manage-bikes">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Manage Bikes</div><div class="card-subtitle" id="bikeCount">8 bikes in fleet</div></div>
+          <button class="btn btn-orange btn-sm" onclick="showPage('add-bike', document.querySelector('[data-page=add-bike]'))">➕ Add New</button>
+        </div>
+        <div style="margin-bottom:16px;">
+          <input type="text" placeholder="🔍 Search bikes..." oninput="searchBikes(this.value)"
+            style="background:var(--dark3);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px;width:100%;max-width:300px;outline:none;font-size:0.88rem;" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Image</th><th>Bike Name</th><th>Category</th><th>Price/Day</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="bikesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS PAGE -->
+    <div class="page" id="page-bookings">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">All Bookings</div><div class="card-subtitle" id="bookingCount">Manage customer bookings</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Bike</th><th>From</th><th>To</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody id="bookingsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS PAGE -->
+    <div class="page" id="page-payments">
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-icon green">💰</div><div><div class="stat-num" id="payTotal">&#8377;0</div><div class="stat-label">Total Revenue</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue">✅</div><div><div class="stat-num" id="payConfirmed">0</div><div class="stat-label">Paid Bookings</div></div></div>
+        <div class="stat-card"><div class="stat-icon purple">⏳</div><div><div class="stat-num" id="payPending">0</div><div class="stat-label">Pending</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Payment History</div></div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Booking ID</th><th>Customer</th><th>Phone</th><th>Bike</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="paymentsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>✏️ Edit Bike</h3>
+    <input type="hidden" id="editId" />
+    <div class="form-grid">
+      <div class="form-group"><label>Bike Name</label><input type="text" id="editName" /></div>
+      <div class="form-group"><label>Category</label>
+        <select id="editCategory">
+          <option value="cruiser">Cruiser</option><option value="sport">Sport</option>
+          <option value="scooter">Scooter</option><option value="adventure">Adventure</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Price/Day (₹)</label><input type="number" id="editPrice" /></div>
+      <div class="form-group"><label>Location</label><input type="text" id="editLocation" /></div>
+      <div class="form-group"><label>Status</label>
+        <select id="editStatus">
+          <option value="available">Available</option><option value="rented">Rented</option><option value="maintenance">Maintenance</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions" style="margin-top:20px;">
+      <button class="btn btn-orange" onclick="saveEdit()">💾 Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>

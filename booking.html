@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Bike – Warrior Bikes</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="booking.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏍️</text></svg>" />
+</head>
+<body class="booking-page">
+
+<!-- NAVBAR -->
+<nav id="navbar" class="scrolled">
+  <a href="index.html" class="nav-logo">Warrior<span>Bikes</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#bikes">Bikes</a></li>
+    <li><a href="index.html#why-us">Why Us</a></li>
+    <li><a href="index.html#reviews">Reviews</a></li>
+    <li><a href="index.html#location">Location</a></li>
+    <li><a href="admin.html">Admin</a></li>
+  </ul>
+  <a href="index.html" class="nav-cta">← Back to Home</a>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#bikes">🏍️ Bikes</a>
+  <a href="index.html#why-us">⭐ Why Us</a>
+  <a href="index.html#reviews">💬 Reviews</a>
+  <a href="index.html#location">📍 Location</a>
+  <a href="admin.html">🔧 Admin Panel</a>
+</div>
+
+<!-- BOOKING PAGE WRAPPER -->
+<div class="bk-page-wrapper">
+
+  <!-- BREADCRUMB -->
+  <div class="bk-breadcrumb">
+    <a href="index.html">Home</a>
+    <span>›</span>
+    <a href="index.html#bikes">Bikes</a>
+    <span>›</span>
+    <span>Book Now</span>
+  </div>
+
+  <!-- STEPPER -->
+  <div class="bk-stepper">
+    <div class="bk-step active" id="bkStep1">
+      <div class="bk-step-num">1</div>
+      <div class="bk-step-label">Booking Details</div>
+    </div>
+    <div class="bk-step-line" id="bkLine1"></div>
+    <div class="bk-step" id="bkStep2">
+      <div class="bk-step-num">2</div>
+      <div class="bk-step-label">Payment</div>
+    </div>
+    <div class="bk-step-line" id="bkLine2"></div>
+    <div class="bk-step" id="bkStep3">
+      <div class="bk-step-num">3</div>
+      <div class="bk-step-label">Confirmed</div>
+    </div>
+  </div>
+
+  <!-- ── STEP 1: BOOKING FORM ── -->
+  <div class="bk-layout" id="pageStep1">
+
+    <!-- LEFT: Bike Preview -->
+    <div class="bk-left">
+      <div class="bk-bike-card">
+        <div class="bk-bike-img-wrap">
+          <img id="bkBikeImg" src="" alt="" />
+          <span class="bk-bike-badge" id="bkBikeBadge">Available</span>
+        </div>
+        <div class="bk-bike-details">
+          <h2 id="bkBikeName">Loading...</h2>
+          <div class="bk-bike-loc">📍 <span id="bkBikeLoc"></span></div>
+          <div class="bk-bike-price-big">₹<span id="bkBikePrice"></span><span>/day</span></div>
+          <div class="bk-bike-rating">★ <span id="bkBikeRating"></span> <span id="bkBikeReviews"></span></div>
+        </div>
+      </div>
+
+      <!-- Price Breakdown (shows after dates selected) -->
+      <div class="bk-price-breakdown" id="bkBreakdown" style="display:none">
+        <div class="bk-breakdown-title">Price Breakdown</div>
+        <div class="bk-breakdown-row"><span>Base Rental</span><span id="bdBase">—</span></div>
+        <div class="bk-breakdown-row" id="bdHelmetRow" style="display:none"><span>Helmet (×<span id="bdHelmetDays"></span> days)</span><span id="bdHelmet">—</span></div>
+        <div class="bk-breakdown-row" id="bdKmRow" style="display:none"><span>Extra KM Package</span><span id="bdKm">—</span></div>
+        <div class="bk-breakdown-divider"></div>
+        <div class="bk-breakdown-row total"><span>Total</span><span id="bdTotal">—</span></div>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="bk-trust">
+        <div class="bk-trust-item">🛡️ Fully Insured</div>
+        <div class="bk-trust-item">🔧 Serviced Bike</div>
+        <div class="bk-trust-item">📞 24/7 Support</div>
+        <div class="bk-trust-item">🚚 Free Delivery</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="bk-right">
+      <div class="bk-form-card">
+        <div class="bk-form-section-title">📅 Rental Dates</div>
+        <div class="bk-form-row">
+          <div class="bk-field">
+            <label>Pick-up Date *</label>
+            <input type="date" id="pickDate" onchange="calcDays()" />
+            <span class="bk-err" id="pickDateErr"></span>
+          </div>
+          <div class="bk-field">
+            <label>Drop-off Date *</label>
+            <input type="date" id="dropDate" onchange="calcDays()" />
+            <span class="bk-err" id="dropDateErr"></span>
+          </div>
+        </div>
+
+        <!-- Duration pill -->
+        <div class="bk-duration-pill" id="bkDurationPill" style="display:none">
+          <span>🗓️</span>
+          <span id="bkDurText">—</span>
+          <span class="bk-dur-total" id="bkDurTotal">—</span>
+        </div>
+
+        <div class="bk-form-section-title" style="margin-top:24px;">👤 Your Details</div>
+        <div class="bk-form-row">
+          <div class="bk-field">
+            <label>Full Name *</label>
+            <input type="text" id="riderName" placeholder="e.g. Rahul Kumar" />
+            <span class="bk-err" id="riderNameErr"></span>
+          </div>
+          <div class="bk-field">
+            <label>Phone Number *</label>
+            <input type="tel" id="riderPhone" placeholder="+91 98765 43210" maxlength="13" />
+            <span class="bk-err" id="riderPhoneErr"></span>
+          </div>
+        </div>
+        <div class="bk-field">
+          <label>Email <span class="bk-optional">(optional)</span></label>
+          <input type="email" id="riderEmail" placeholder="you@email.com" />
+        </div>
+
+        <div class="bk-form-section-title" style="margin-top:24px;">⚙️ Add-ons</div>
+        <div class="bk-addons">
+          <label class="bk-checkbox-label">
+            <input type="checkbox" id="helmetCheck" onchange="calcDays()" />
+            <span class="bk-checkmark"></span>
+            <div>
+              <div class="bk-addon-name">Helmet Required</div>
+              <div class="bk-addon-desc">Safety first — includes certified helmet</div>
+            </div>
+            <span class="bk-addon-price">+₹50/day</span>
+          </label>
+          <div class="bk-select-addon">
+            <div>
+              <div class="bk-addon-name">Extra KM Package</div>
+              <div class="bk-addon-desc">Need more range? Add extra kilometres</div>
+            </div>
+            <select id="kmPackage" onchange="calcDays()">
+              <option value="0">No extra KMs (Free)</option>
+              <option value="100">+50 KMs — ₹100</option>
+              <option value="200">+100 KMs — ₹200</option>
+              <option value="400">+200 KMs — ₹400</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bk-form-actions">
+          <button class="bk-btn-wa" onclick="sendWhatsAppBooking()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Book via WhatsApp
+          </button>
+          <button class="bk-btn-primary" onclick="proceedToPayment()">
+            Proceed to Payment →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: PAYMENT ── -->
+  <div class="bk-payment-page" id="pageStep2" style="display:none">
+    <div class="bk-pay-layout">
+
+      <!-- Left: Summary -->
+      <div class="bk-pay-summary-col">
+        <div class="bk-pay-summary-card">
+          <div class="bk-pay-summary-title">Booking Summary</div>
+          <img id="payBikeImg" src="" alt="" class="bk-pay-bike-img" />
+          <div class="bk-pay-bike-name" id="payBikeName"></div>
+          <div class="bk-pay-meta" id="payBikeLoc"></div>
+          <div class="bk-pay-divider"></div>
+          <div class="bk-pay-row"><span>Dates</span><span id="payDates"></span></div>
+          <div class="bk-pay-row"><span>Duration</span><span id="payDuration"></span></div>
+          <div class="bk-pay-row"><span>Customer</span><span id="payCustomer"></span></div>
+          <div class="bk-pay-row"><span>Phone</span><span id="payPhone"></span></div>
+          <div class="bk-pay-divider"></div>
+          <div class="bk-pay-row total-row"><span>Total Amount</span><span id="payTotal" class="bk-pay-total-val"></span></div>
+        </div>
+      </div>
+
+      <!-- Right: Payment Form -->
+      <div class="bk-pay-form-col">
+        <div class="bk-form-card">
+          <div class="bk-form-section-title">💳 Complete Payment</div>
+
+          <!-- QR Section -->
+          <div class="bk-qr-wrap">
+            <div class="bk-qr-box">
+              <div class="bk-qr-grid" id="bkQrGrid"></div>
+              <div class="bk-qr-amount" id="bkQrAmount"></div>
+            </div>
+            <div class="bk-qr-info">
+              <div class="bk-qr-title">Scan & Pay via UPI</div>
+              <div class="bk-qr-sub">Use any UPI app — GPay, PhonePe, Paytm</div>
+              <div class="bk-qr-upi-id">UPI: warriorbikes@upi</div>
+            </div>
+          </div>
+
+          <div class="bk-pay-or">— or pay by entering UPI ID —</div>
+
+          <div class="bk-field">
+            <label>Your UPI ID *</label>
+            <input type="text" id="upiId" placeholder="yourname@upi / yourname@paytm" />
+            <span class="bk-err" id="upiErr"></span>
+          </div>
+
+          <!-- Payment method pills -->
+          <div class="bk-pay-methods">
+            <div class="bk-pay-method active" onclick="selectPayMethod(this)">📱 GPay</div>
+            <div class="bk-pay-method" onclick="selectPayMethod(this)">💜 PhonePe</div>
+            <div class="bk-pay-method" onclick="selectPayMethod(this)">🔵 Paytm</div>
+            <div class="bk-pay-method" onclick="selectPayMethod(this)">🏦 Net Banking</div>
+          </div>
+
+          <div class="bk-pay-total-bar">
+            <span>Total Payable</span>
+            <span id="payTotalBar" class="bk-pay-total-bar-val"></span>
+          </div>
+
+          <div class="bk-pay-actions">
+            <button class="bk-btn-back" onclick="goBackToBooking()">← Back</button>
+            <button class="bk-btn-primary" style="flex:1;" onclick="processPayment()">⚡ Pay Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: SUCCESS ── -->
+  <div class="bk-success-page" id="pageStep3" style="display:none">
+    <div class="bk-success-card">
+      <div class="bk-success-anim">
+        <div class="bk-success-ring"></div>
+        <div class="bk-success-check">✓</div>
+      </div>
+      <h2>Payment Successful!</h2>
+      <p class="bk-success-sub">Booking Confirmed 🎉</p>
+      <p class="bk-success-msg">We'll contact you on WhatsApp shortly.<br />Get ready for your ride!</p>
+      <div class="bk-booking-id" id="bkBookingId"></div>
+
+      <div class="bk-success-details" id="bkSuccessDetails"></div>
+
+      <div class="bk-success-actions">
+        <button class="bk-btn-wa" onclick="shareOnWhatsApp()">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Share on WhatsApp
+        </button>
+        <a href="index.html#bikes" class="bk-btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;">🏍️ Browse More Bikes</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end bk-page-wrapper -->
+
+<!-- TOAST -->
+<div id="toastContainer"></div>
+
+<!-- WHATSAPP FAB -->
+<a href="https://wa.me/919876543210?text=Hi%2C%20I%20want%20to%20rent%20a%20bike" target="_blank" class="wa-fab" title="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="booking.js"></script>
+</body>
+</html>
